@@ -238,14 +238,14 @@ function leafRing(): string {
 function curls(cx: number, cy: number): string {
   const rand = rng(7)
   let out = ''
-  for (let i = 0; i < 18; i++) {
-    const a = Math.PI * (1.0 + (i / 17) * 1.0)
-    const rr = 42 + rand() * 7
+  for (let i = 0; i < 10; i++) {
+    const a = Math.PI * (1.0 + (i / 9) * 1.0)
+    const rr = 40 + rand() * 4
     const x = cx + Math.cos(a) * rr
     const y = cy + Math.sin(a) * rr * 0.95
-    const r = 11 + rand() * 6
+    const r = 16 + rand() * 4
     out += `<circle cx="${r1(x)}" cy="${r1(y)}" r="${r1(r)}" fill="#5a3a22"/>`
-    out += `<path d="M${r1(x - r * 0.5)} ${r1(y)} q ${r1(r * 0.5)} -${r1(r * 0.7)} ${r1(r)} 0" stroke="#8a6040" stroke-width="2" fill="none" opacity="0.8"/>`
+    if (i % 3 === 1) out += `<path d="M${r1(x - r * 0.6)} ${r1(y - r * 0.2)} q ${r1(r * 0.6)} -${r1(r * 0.35)} ${r1(r * 1.2)} 0" stroke="#7a5434" stroke-width="2" fill="none" opacity="0.7"/>`
   }
   return out
 }
@@ -295,25 +295,22 @@ function figure(cx: number): string {
     // ears and face
     `<ellipse cx="1420" cy="404" rx="8" ry="13" fill="${skin}"/><ellipse cx="1490" cy="404" rx="8" ry="13" fill="${skin}"/>` +
     `<ellipse cx="${cx}" cy="400" rx="35" ry="43" fill="${skin}"/>` +
-    `<circle cx="1433" cy="416" r="7" fill="#e89b88" opacity="0.25"/><circle cx="1477" cy="416" r="7" fill="#e89b88" opacity="0.25"/>` +
-    // stubble and moustache
-    `<path d="M1421 402 Q1420 442 1455 444 Q1490 442 1489 402 Q1486 428 1470 432 Q1455 427 1440 432 Q1424 428 1421 402 Z" fill="#6b4a32" opacity="0.28"/>` +
-    `<path d="M1444 418 Q1455 414 1466 418" stroke="#6b4a32" stroke-width="2.6" stroke-linecap="round" fill="none" opacity="0.6"/>` +
-    // a confident smirk
-    `<path d="M1444 425 Q1457 432 1469 424 q 2 -2 3 -4" stroke="#a0584a" stroke-width="2.6" stroke-linecap="round" fill="none"/>` +
+    `<circle cx="1433" cy="416" r="7" fill="#e89b88" opacity="0.12"/><circle cx="1477" cy="416" r="7" fill="#e89b88" opacity="0.12"/>` +
+    // a stern, set mouth
+    `<path d="M1445 427 Q1455 425 1465 427" stroke="#a0584a" stroke-width="2.6" stroke-linecap="round" fill="none"/>` +
     // nose
     `<path d="M1456 392 Q1453 407 1450 411 Q1455 415 1461 411" stroke="#c99678" stroke-width="2" stroke-linecap="round" fill="none"/>` +
     // brown eyes, a little heavy-lidded
-    `<ellipse cx="1441" cy="393" rx="7.5" ry="3.8" fill="#ffffff"/><ellipse cx="1469" cy="393" rx="7.5" ry="3.8" fill="#ffffff"/>` +
+    `<ellipse cx="1441" cy="393" rx="7.5" ry="3" fill="#ffffff"/><ellipse cx="1469" cy="393" rx="7.5" ry="3" fill="#ffffff"/>` +
     `<circle cx="1442" cy="393" r="3.4" fill="#3b2416"/><circle cx="1468" cy="393" r="3.4" fill="#3b2416"/>` +
     `<circle cx="1443" cy="392" r="1" fill="#ffffff"/><circle cx="1469" cy="392" r="1" fill="#ffffff"/>` +
-    `<path d="M1433 392 Q1441 387 1449 392 M1461 392 Q1469 387 1477 392" stroke="${brow}" stroke-width="2" fill="none"/>` +
+    `<path d="M1433 391 Q1441 388 1449 391 M1461 391 Q1469 388 1477 391" stroke="${brow}" stroke-width="2.6" fill="none"/>` +
     // thick dark brows
-    `<path d="M1429 382 Q1439 374 1450 380 M1460 380 Q1471 374 1481 382" stroke="${brow}" stroke-width="5" stroke-linecap="round" fill="none"/>` +
+    `<path d="M1429 380 Q1440 377 1451 385 M1459 385 Q1470 377 1481 380" stroke="${brow}" stroke-width="5.5" stroke-linecap="round" fill="none"/>` +
     // curly hair on top, a curl flipping up, a few over the forehead
     curls(cx, 372) +
-    `<circle cx="1436" cy="364" r="11" fill="${hair}"/><circle cx="1456" cy="358" r="13" fill="${hair}"/><circle cx="1476" cy="364" r="10" fill="${hair}"/><circle cx="1446" cy="338" r="13" fill="${hair}"/><circle cx="1468" cy="336" r="12" fill="${hair}"/>` +
-    `<circle cx="1462" cy="314" r="12" fill="${hair}"/><circle cx="1478" cy="320" r="9" fill="${hair}"/><path d="M1456 314 q 6 -8 12 0" stroke="#8a6040" stroke-width="2" fill="none"/>` +
+    `<path d="M1420 372 Q1430 352 1455 356 Q1478 350 1492 372 Q1480 360 1458 366 Q1436 360 1420 372 Z" fill="${hair}"/>` +
+    `<path d="M1430 330 Q1452 304 1484 322 Q1462 314 1442 330 Z" fill="${hair}"/>` +
     // the laurel crown
     `<g transform="translate(${cx} 344) scale(1.3)">` + leafRing() + `</g>`
   )
