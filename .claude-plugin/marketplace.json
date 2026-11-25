@@ -1,5 +1,8 @@
 {
   "name": "north-pole-theme",
   "owner": { "name": "Jackgoodale" },
-  "plugins": [{ "name": "north-pole", "source": "./" }]
+  "plugins": [
+    { "name": "north-pole", "source": "./" },
+    { "name": "emperor", "source": "./emperor" }
+  ]
 }
