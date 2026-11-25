@@ -47,7 +47,7 @@ function toFill(context: SessionContextUsage): Fill {
   return { percent: context.percent, tokens: context.tokens }
 }
 
-// Whether the theme is on, remembered across sessions. On unless /background turned it off.
+// Whether the theme is on, remembered across sessions. On unless /throne turned it off.
 const ENABLED = 'enabled'
 
 async function isEnabled($: EngineInterface): Promise<boolean> {
@@ -75,8 +75,8 @@ async function applyLook($: EngineInterface): Promise<void> {
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
     await $.command.register({
-      name: 'background',
-      description: 'Take the throne: turn the imperial throne-room theme on or off (/background, /background on, /background off)',
+      name: 'throne',
+      description: 'Take the throne: turn the imperial throne-room theme on or off (/throne, /throne on, /throne off)',
     })
     if (await isEnabled($)) {
       await applyLook($)
@@ -87,7 +87,7 @@ export const register: Register = on => {
     return next(e)
   })
 
-  on('command.run', { command: 'background' }, async ($, e) => {
+  on('command.run', { command: 'throne' }, async ($, e) => {
     const arg = e.args.trim().toLowerCase()
     const turnOn = arg === 'on' ? true : arg === 'off' ? false : !(await isEnabled($))
     await $.store.set(ENABLED, turnOn)
@@ -97,7 +97,7 @@ export const register: Register = on => {
       return { text: 'Vive l’Empereur! The throne is yours.' }
     }
     await $.theme.clear()
-    return { text: 'You step down from the throne. Type /background to reclaim it.' }
+    return { text: 'You step down from the throne. Type /throne to reclaim it.' }
   })
 
   on('session.measure', async ($, e, next) => {

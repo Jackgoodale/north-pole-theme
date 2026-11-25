@@ -28,7 +28,7 @@ Already installed? Update to get `/xmas`: in the desktop app's Plugins menu, upd
 
 ## Bonus theme: Emperor
 
-An imperial throne room: crimson walls sown with golden bees, you, cartoon-style, in coronation robes on a gilded throne, candelabra, and a tricolor war banner that carries your context and token count. Its laurel wreath fills in leaf by leaf as your context fills. Type `/background` to take the throne or step down.
+An imperial throne room: crimson walls sown with golden bees, you, cartoon-style, in coronation robes on a gilded throne, candelabra, and a tricolor war banner that carries your context and token count. Its laurel wreath fills in leaf by leaf as your context fills. Type `/throne` to take the throne or step down.
 
 Install it the same way, choosing **emperor** instead of north-pole, or:
 
@@ -36,4 +36,4 @@ Install it the same way, choosing **emperor** instead of north-pole, or:
 claude plugin install emperor --marketplace Jackgoodale/north-pole-theme
 ```
 
-Only one theme shows at a time: whichever you switched on last wins, so turn the other off (`/xmas off` or `/background off`).
+Only one theme shows at a time: whichever you switched on last wins, so turn the other off (`/xmas off` or `/throne off`).

@@ -1,1 +1,1 @@
-{ "name": "emperor", "version": "0.4.0", "description": "An imperial throne room: a gilded throne, ermine and crimson, and a war banner on the wall that carries your context and token count. /background turns it on or off.", "types": "./types/index.d.ts" }
+{ "name": "emperor", "version": "0.4.1", "description": "An imperial throne room: a gilded throne, ermine and crimson, and a war banner on the wall that carries your context and token count. /throne turns it on or off.", "types": "./types/index.d.ts" }
