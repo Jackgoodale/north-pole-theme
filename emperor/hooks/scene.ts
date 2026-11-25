@@ -110,7 +110,6 @@ function banner(percent: number | undefined, tokens: number | undefined, fill: n
   const bot = 650
   const big = percent === undefined ? '-' : `${percent}%`
   const small = tokens === undefined ? '-' : tokens >= 1000 ? `${Math.round(tokens / 1000)}k` : `${tokens}`
-  const third = (x1 - x0) / 3
   const leaves = 22
   const lit = Math.round(fill * leaves)
   const shape = `M${x0} ${top} H${x1} V${bot} L${cx + 30} ${bot + 44} L${cx} ${bot + 14} L${cx - 30} ${bot + 44} L${x0} ${bot} Z`
@@ -122,9 +121,7 @@ function banner(percent: number | undefined, tokens: number | undefined, fill: n
     `<g class="banner" style="transform-origin:${cx}px ${top}px">` +
     `<clipPath id="bannerClip"><path d="${shape}"/></clipPath>` +
     `<g clip-path="url(#bannerClip)">` +
-    `<rect x="${x0}" y="${top}" width="${third}" height="${bot - top + 50}" fill="#1f3b8f"/>` +
-    `<rect x="${x0 + third}" y="${top}" width="${third}" height="${bot - top + 50}" fill="#f2ecdf"/>` +
-    `<rect x="${x0 + 2 * third}" y="${top}" width="${third}" height="${bot - top + 50}" fill="#b3202e"/>` +
+    `<rect x="${x0}" y="${top}" width="${x1 - x0}" height="${bot - top + 50}" fill="#1f3b8f"/>` +
     `<rect x="${x0}" y="${top}" width="${x1 - x0}" height="${bot - top + 50}" fill="url(#cloth)"/>` +
     `</g>` +
     `<path d="${shape}" fill="none" stroke="url(#gold)" stroke-width="5"/>` +
@@ -187,23 +184,12 @@ function throne(): string {
     // seat and cushion
     `<rect x="1346" y="640" width="218" height="40" rx="10" fill="url(#velvet)"/>` +
     `<rect x="1340" y="676" width="230" height="20" fill="url(#gold)"/>` +
-    // front panel with the N in laurels
+    // front panel with JG in laurels
     `<rect x="1346" y="696" width="218" height="160" fill="#8e1b2a"/>` +
     `<rect x="1356" y="706" width="198" height="140" fill="none" stroke="url(#gold)" stroke-width="4"/>` +
     laurel(cx, 776, 44, 46, 18, 18) +
-    `<text x="${cx}" y="796" text-anchor="middle" font-family="serif" font-weight="700" font-size="54" fill="#e8c25a">N</text>` +
-    // laurel crown resting on the cushion
-    `<g transform="translate(${cx} 628)">` +
-    `<ellipse cx="0" cy="6" rx="34" ry="9" fill="none" stroke="#b8902e" stroke-width="5"/>` +
-    leafRing() +
-    `</g>` +
-    // ermine robe draped over the seat and down the dais
-    `<path d="M1346 650 Q1318 690 1330 760 Q1326 830 1296 900 Q1330 920 1372 912 Q1388 860 1384 800 Q1380 720 1400 668 Q1380 648 1346 650 Z" fill="url(#ermine)"/>` +
-    `<path d="M1384 800 Q1388 860 1372 912" stroke="#8e1b2a" stroke-width="8" fill="none"/>` +
-    // sceptre leaning on the throne
-    `<path d="M1600 260 L1530 900" stroke="url(#gold)" stroke-width="8" stroke-linecap="round"/>` +
-    `<circle cx="1595" cy="300" r="7" fill="url(#gold)"/><circle cx="1570" cy="530" r="6" fill="url(#gold)"/>` +
-    eagle(1602, 238, 0.32, '#e8c25a')
+    `<text x="${cx}" y="796" text-anchor="middle" font-family="serif" font-weight="700" font-size="46" fill="#e8c25a">JG</text>` +
+    figure(cx)
   )
 }
 
@@ -244,6 +230,93 @@ function leafRing(): string {
     out += `<ellipse cx="${r1(x)}" cy="${r1(y)}" rx="9" ry="3.6" transform="rotate(${r1(rot)} ${r1(x)} ${r1(y)})" fill="#e8c25a"/>`
   }
   return out
+}
+
+// The emperor on the throne: a cartoon of JG in coronation robes, curly
+// brown hair under a laurel crown, sceptre in one hand, hand of justice
+// in the other.
+function curls(cx: number, cy: number): string {
+  const rand = rng(7)
+  let out = ''
+  for (let i = 0; i < 18; i++) {
+    const a = Math.PI * (1.0 + (i / 17) * 1.0)
+    const rr = 42 + rand() * 7
+    const x = cx + Math.cos(a) * rr
+    const y = cy + Math.sin(a) * rr * 0.95
+    const r = 11 + rand() * 6
+    out += `<circle cx="${r1(x)}" cy="${r1(y)}" r="${r1(r)}" fill="#5a3a22"/>`
+    out += `<path d="M${r1(x - r * 0.5)} ${r1(y)} q ${r1(r * 0.5)} -${r1(r * 0.7)} ${r1(r)} 0" stroke="#8a6040" stroke-width="2" fill="none" opacity="0.8"/>`
+  }
+  return out
+}
+
+function figure(cx: number): string {
+  const skin = '#f2c9a9'
+  const hair = '#5a3a22'
+  const brow = '#2a1a12'
+  return (
+    // cape behind the body
+    `<path d="M1398 462 Q1336 560 1326 852 L1584 852 Q1574 560 1512 462 Z" fill="url(#velvet)"/>` +
+    `<path d="M1326 846 L1584 846" stroke="url(#gold)" stroke-width="8"/>` +
+    `<path d="M1398 462 Q1336 560 1326 852" stroke="#f6f1e6" stroke-width="10" fill="none"/>` +
+    // legs in white satin
+    `<rect x="1418" y="640" width="74" height="58" rx="10" fill="#efe6d4"/>` +
+    `<rect x="1424" y="694" width="28" height="142" fill="#efe6d4"/><rect x="1460" y="694" width="28" height="142" fill="#efe6d4"/>` +
+    `<rect x="1424" y="730" width="28" height="6" fill="url(#gold)"/><rect x="1460" y="730" width="28" height="6" fill="url(#gold)"/>` +
+    `<rect x="1424" y="790" width="28" height="6" fill="url(#gold)"/><rect x="1460" y="790" width="28" height="6" fill="url(#gold)"/>` +
+    `<ellipse cx="1438" cy="842" rx="18" ry="8" fill="#e9dcc0" stroke="#c9952f" stroke-width="2"/>` +
+    `<ellipse cx="1474" cy="842" rx="18" ry="8" fill="#e9dcc0" stroke="#c9952f" stroke-width="2"/>` +
+    // satin tunic
+    `<path d="M1420 470 L1490 470 L1496 648 L1414 648 Z" fill="#f3ead8"/>` +
+    `<rect x="1449" y="520" width="12" height="128" fill="url(#gold)" opacity="0.85"/>` +
+    // the robe's front fold over one knee, ermine edged
+    `<path d="M1418 600 Q1388 700 1398 852 L1452 852 Q1440 760 1462 680 Q1448 630 1418 600 Z" fill="url(#velvet)"/>` +
+    `<path d="M1452 852 Q1440 760 1462 680 L1475 688 Q1455 770 1467 852 Z" fill="url(#ermine)"/>` +
+    // sleeves
+    `<path d="M1408 488 Q1382 518 1376 556" stroke="#a3192a" stroke-width="30" stroke-linecap="round" fill="none"/>` +
+    `<path d="M1502 488 Q1534 560 1522 632" stroke="#a3192a" stroke-width="30" stroke-linecap="round" fill="none"/>` +
+    // ermine collar, chain and star
+    `<path d="M1378 478 Q1455 428 1532 478 Q1542 522 1500 534 Q1455 550 1410 534 Q1368 522 1378 478 Z" fill="url(#ermine)"/>` +
+    `<path d="M1408 500 Q1455 572 1502 500" stroke="url(#gold)" stroke-width="4" fill="none"/>` +
+    star(1455, 568, 13, '#f6f1e6') + `<circle cx="1455" cy="568" r="4" fill="url(#gold)"/>` +
+    // sceptre in the right hand, hand of justice in the left
+    `<rect x="1370" y="300" width="7" height="556" fill="url(#gold)"/>` +
+    `<circle cx="1373" cy="304" r="10" fill="url(#gold)"/>` +
+    eagle(1373, 276, 0.3, '#e8c25a') +
+    `<circle cx="1376" cy="560" r="11" fill="#f6f1e6"/><circle cx="1374" cy="566" r="10" fill="${skin}"/>` +
+    `<path d="M1508 720 L1560 424" stroke="url(#gold)" stroke-width="6" stroke-linecap="round"/>` +
+    `<ellipse cx="1561" cy="414" rx="7" ry="10" fill="url(#ivory)"/><rect x="1556" y="392" width="4" height="16" rx="2" fill="url(#ivory)"/><rect x="1561" y="390" width="4" height="18" rx="2" fill="url(#ivory)"/>` +
+    `<circle cx="1522" cy="634" r="11" fill="#f6f1e6"/><circle cx="1520" cy="642" r="10" fill="${skin}"/>` +
+    // lace ruff and neck
+    `<circle cx="${cx}" cy="448" r="31" fill="#f6f1e6" stroke="#d8cfbd" stroke-width="3" stroke-dasharray="4 3"/>` +
+    `<rect x="${cx - 12}" y="426" width="24" height="26" fill="${skin}"/>` +
+    // hair behind the head
+    `<path d="M1412 404 Q1398 322 1455 314 Q1512 322 1498 404 Z" fill="${hair}"/>` +
+    // ears and face
+    `<ellipse cx="1420" cy="404" rx="8" ry="13" fill="${skin}"/><ellipse cx="1490" cy="404" rx="8" ry="13" fill="${skin}"/>` +
+    `<ellipse cx="${cx}" cy="400" rx="35" ry="43" fill="${skin}"/>` +
+    `<circle cx="1433" cy="416" r="7" fill="#e89b88" opacity="0.25"/><circle cx="1477" cy="416" r="7" fill="#e89b88" opacity="0.25"/>` +
+    // stubble and moustache
+    `<path d="M1421 402 Q1420 442 1455 444 Q1490 442 1489 402 Q1486 428 1470 432 Q1455 427 1440 432 Q1424 428 1421 402 Z" fill="#6b4a32" opacity="0.28"/>` +
+    `<path d="M1444 418 Q1455 414 1466 418" stroke="#6b4a32" stroke-width="2.6" stroke-linecap="round" fill="none" opacity="0.6"/>` +
+    // a confident smirk
+    `<path d="M1444 425 Q1457 432 1469 424 q 2 -2 3 -4" stroke="#a0584a" stroke-width="2.6" stroke-linecap="round" fill="none"/>` +
+    // nose
+    `<path d="M1456 392 Q1453 407 1450 411 Q1455 415 1461 411" stroke="#c99678" stroke-width="2" stroke-linecap="round" fill="none"/>` +
+    // brown eyes, a little heavy-lidded
+    `<ellipse cx="1441" cy="393" rx="7.5" ry="3.8" fill="#ffffff"/><ellipse cx="1469" cy="393" rx="7.5" ry="3.8" fill="#ffffff"/>` +
+    `<circle cx="1442" cy="393" r="3.4" fill="#3b2416"/><circle cx="1468" cy="393" r="3.4" fill="#3b2416"/>` +
+    `<circle cx="1443" cy="392" r="1" fill="#ffffff"/><circle cx="1469" cy="392" r="1" fill="#ffffff"/>` +
+    `<path d="M1433 392 Q1441 387 1449 392 M1461 392 Q1469 387 1477 392" stroke="${brow}" stroke-width="2" fill="none"/>` +
+    // thick dark brows
+    `<path d="M1429 382 Q1439 374 1450 380 M1460 380 Q1471 374 1481 382" stroke="${brow}" stroke-width="5" stroke-linecap="round" fill="none"/>` +
+    // curly hair on top, a curl flipping up, a few over the forehead
+    curls(cx, 372) +
+    `<circle cx="1436" cy="364" r="11" fill="${hair}"/><circle cx="1456" cy="358" r="13" fill="${hair}"/><circle cx="1476" cy="364" r="10" fill="${hair}"/><circle cx="1446" cy="338" r="13" fill="${hair}"/><circle cx="1468" cy="336" r="12" fill="${hair}"/>` +
+    `<circle cx="1462" cy="314" r="12" fill="${hair}"/><circle cx="1478" cy="320" r="9" fill="${hair}"/><path d="M1456 314 q 6 -8 12 0" stroke="#8a6040" stroke-width="2" fill="none"/>` +
+    // the laurel crown
+    `<g transform="translate(${cx} 344) scale(1.3)">` + leafRing() + `</g>`
+  )
 }
 
 export function buildScene(percent: number | undefined, tokens: number | undefined): string {
@@ -294,7 +367,7 @@ export function buildScene(percent: number | undefined, tokens: number | undefin
 <!-- the emblem high on the wall -->
 <circle cx="800" cy="190" r="120" fill="url(#throneGlow)"/>
 ${laurel(800, 190, 70, 74, 26, 26)}
-<text x="800" y="214" text-anchor="middle" font-family="serif" font-weight="700" font-size="76" fill="#e8c25a">N</text>
+<text x="800" y="214" text-anchor="middle" font-family="serif" font-weight="700" font-size="64" fill="#e8c25a">JG</text>
 <!-- floor and carpet -->
 <rect y="830" width="${W}" height="170" fill="url(#floor)"/>
 <rect y="826" width="${W}" height="6" fill="url(#gold)"/>
