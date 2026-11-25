@@ -1,4 +1,4 @@
-import type { Register, SessionContextUsage, ThemeSetArgs } from 'claude-code'
+import type { EngineInterface, Register, SessionContextUsage, ThemeSetArgs } from 'claude-code'
 import { atom, read, update } from 'claude-code'
 
 import type { Fill } from '../types'
@@ -37,22 +37,52 @@ function toFill(context: SessionContextUsage): Fill {
   return { percent: context.percent, tokens: context.tokens }
 }
 
+// Whether the theme is on, remembered across sessions. On unless /xmas turned it off.
+const ENABLED = 'enabled'
+
+async function isEnabled($: EngineInterface): Promise<boolean> {
+  return (await $.store.get(ENABLED)) !== false
+}
+
+async function applyLook($: EngineInterface): Promise<void> {
+  const unpainted = problems.find(line => line.startsWith("Desktop won't paint"))
+
+  if (unpainted !== undefined) {
+    $.ui.toast(unpainted)
+  }
+  const set = await $.theme.set(LOOK)
+
+  if (!set.isDrawn) {
+    $.ui.status(set.reason)
+  }
+}
+
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
-    const unpainted = problems.find(line => line.startsWith("Desktop won't paint"))
-
-    if (unpainted !== undefined) {
-      $.ui.toast(unpainted)
-    }
-    const set = await $.theme.set(LOOK)
-
-    if (!set.isDrawn) {
-      $.ui.status(set.reason)
+    await $.command.register({
+      name: 'xmas',
+      description: 'Turn the North Pole Christmas theme on or off (/xmas, /xmas on, /xmas off)',
+    })
+    if (await isEnabled($)) {
+      await applyLook($)
     }
     const { context } = await $.session.usage()
     await update($, fill, () => toFill(context))
 
     return next(e)
+  })
+
+  on('command.run', { command: 'xmas' }, async ($, e) => {
+    const arg = e.args.trim().toLowerCase()
+    const turnOn = arg === 'on' ? true : arg === 'off' ? false : !(await isEnabled($))
+    await $.store.set(ENABLED, turnOn)
+
+    if (turnOn) {
+      await applyLook($)
+      return { text: 'Ho ho ho! The North Pole theme is on.' }
+    }
+    await $.theme.clear()
+    return { text: 'North Pole theme off. Type /xmas to bring the snow back.' }
   })
 
   // After each turn (and after /compact) the engine measures the session.
