@@ -1,0 +1,1 @@
+{ "name": "north-pole", "version": "0.2.0", "description": "Christmas night at the North Pole: snow falls and piles up as the context window fills, with a robin on a sign that shows your context.", "types": "./types/index.d.ts" }
